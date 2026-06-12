@@ -26,10 +26,7 @@ module.exports.index = async(req, res) => {
                 limitItems: 4
         };
        
-        if (req.query.page){
-                objectPagination.currentPage = parseInt(req.query.page);
-        }
-        objectPagination.skip = (objectPagination.currentPage - 1) * objectPagination.limitItems
+        objectPagination = paginationHelper(req, objectPagination)
         
         const products = await Product.find(find).limit(objectPagination.limitItems).skip(objectPagination.skip);
         const countProducts = await Product.countDocuments(find);
