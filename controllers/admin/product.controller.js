@@ -32,7 +32,7 @@ module.exports.index = async(req, res) => {
         const countProducts = await Product.countDocuments(find);
         const totalPage = Math.ceil(countProducts/4);
         objectPagination.totalPage = totalPage;
-
+       
 
         console.log(objectPagination.totalPage)
         res.render("admin/pages/products/index",{
@@ -42,4 +42,13 @@ module.exports.index = async(req, res) => {
                 keyword: objectSearch.keyword,
                 pagination:objectPagination
         });
+}
+//[GET] /admin/products/change-status/:status/:id
+module.exports.changeStatus = async(req, res) => {
+         
+        const status = req.params.status
+        const id = req.params.id;
+        await Product.updateOne({_id: id}, {status: status });
+        res.redirect(req.get("Referrer") || "/");
+        
 }
