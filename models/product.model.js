@@ -11,7 +11,8 @@ const productSchema = new mongoose.Schema(
         thumbnail: String,
         tags: [String],
         status: String,
-        deleted: Boolean
+        deleted: Boolean,
+        deletedAt: Date
     }
 );
 
