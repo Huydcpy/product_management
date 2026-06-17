@@ -25,10 +25,14 @@ module.exports.index = async(req, res) => {
                 currentPage: 1,
                 limitItems: 4
         };
-       
+        
         objectPagination = paginationHelper(req, objectPagination)
         
-        const products = await Product.find(find).limit(objectPagination.limitItems).skip(objectPagination.skip);
+        let products = await Product.find(find).sort({ position: 1 }).limit(objectPagination.limitItems).skip(objectPagination.skip).lean();
+        products = products.map(product => ({
+                ...product,
+                id: String(product._id)
+        }));
         const countProducts = await Product.countDocuments(find);
         const totalPage = Math.ceil(countProducts/4);
         objectPagination.totalPage = totalPage;
@@ -68,6 +72,19 @@ module.exports.changeMulti = async(req, res) => {
                                 deleted: true,
                                 deletedAt: new Date(),
                         });
+                        break;
+                case "change-position":
+                        for (const item of ids){
+                                let [id, position] = item.split("-");
+                                position = parseInt(position)
+                                if(isNaN(position)){
+                                        continue;
+                                }
+                                await Product.updateOne({_id: id},{
+                                        position: position
+                                })
+                        }
+                        break;
                 default:
                         break;
         }
