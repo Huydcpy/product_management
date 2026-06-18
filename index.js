@@ -23,6 +23,7 @@ app.use(methodOverride('_method'))
 
 //parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.set("views", "./views");
 app.set("view engine", "pug");
 
@@ -31,12 +32,14 @@ app.set("view engine", "pug");
 app.use(cookieParser("huydeptrai"))
 app.use(session({cookie: {maxAge: 60000}}));
 app.use(flash())
+
 //end fash
 //App Locals Variables
 app.locals.prefixAdmin = systemConfig.prefixAdmin
 routeAdmin(app);
 route(app);
 app.use(express.static("public"));
+
 
 // app.get("/", (req, res) => {
 //     res.render("client/pages/home/index");
