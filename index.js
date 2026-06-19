@@ -39,6 +39,11 @@ app.locals.prefixAdmin = systemConfig.prefixAdmin
 routeAdmin(app);
 route(app);
 app.use(express.static("public"));
+app.use("/uploads", express.static("./public/uploads", {
+        setHeaders: (res) => {
+                res.setHeader("Content-Disposition", "inline");
+        }
+}));
 
 
 // app.get("/", (req, res) => {
